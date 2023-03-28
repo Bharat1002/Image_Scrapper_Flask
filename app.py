@@ -1,4 +1,3 @@
-import os
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests
@@ -6,9 +5,6 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen as uReq
 import logging
 import pymongo
-from dotenv import load_dotenv
-
-load_dotenv()
 logging.basicConfig(filename="scrapper.log", level=logging.INFO)
 
 app = Flask(__name__)
@@ -62,10 +58,6 @@ def index():
                 img_data.append(mydict)
                 with open(os.path.join(save_directory, f"{query}_{image_tags.index(image_tag)}.jpg"), "wb") as f:
                     f.write(image_data)
-            client = pymongo.MongoClient(os.getenv('MONGO_CLIENT_URL'))
-            db = client['image_scrap']
-            review_col = db['image_scrap_data']
-            review_col.insert_many(img_data)
 
             return "image loaded"
         except Exception as e:
